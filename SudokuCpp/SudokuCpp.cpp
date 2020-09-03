@@ -7,6 +7,12 @@
 
 // 数独を解く
 void dfs(Sudoku& board, std::vector<Field>& res) {
+    // 数独の盤面状態を保持しておく
+    Sudoku board_prev = board;
+
+    // 一意に自動的に決まるマスを埋める
+    board.process();
+
     // 空きマスの座標を表す
     int x, y;
 
@@ -14,6 +20,9 @@ void dfs(Sudoku& board, std::vector<Field>& res) {
     if (!board.find_empty(x, y)) {
         // 解に追加
         res.push_back(board.get());
+
+        // リターンする前に一回元に戻す
+        board = board_prev;
         return;
     }
 
@@ -26,6 +35,9 @@ void dfs(Sudoku& board, std::vector<Field>& res) {
         dfs(board, res);
         board.reset(x, y);
     }
+
+    // 元に戻す
+    board = board_prev;
 }
 
 int main() {
